@@ -10,24 +10,31 @@ const state = reactive({
 
 const methods = {
   async loginUser(payload) {
-    const { email, password } = payload;
+    const { email, password } = payload;    
 
     try {
       // user login successfully
       await auth.signInWithEmailAndPassword(email, password);
-      state.loginError = null;
-
+      
       // get current user id
       const userId = auth.currentUser.uid;
+      
+      // const res = await db.collection("smackchat-users").doc(userId).get();
+      // if (res.data() === state.userDetails) {
+      //   state.loginError = 'This account is already logged in !'
+      //   return
+      // }
+      
+      
+      console.log("current user: ", state.userDetails);
 
       // set user online status to true
       await db
         .collection("smackchat-users")
         .doc(userId)
         .update({ online: true });
-      
-      state.loginError = null
-      
+
+      state.loginError = null;
     } catch (err) {
       state.loginError = err.message;
     }

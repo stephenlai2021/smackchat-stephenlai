@@ -35,8 +35,9 @@
           flat
           dense
         >
-          Logout<br>
-          {{ store.state.userDetails.name }}
+          &nbsp;Logout<br>
+          <!-- &nbsp;{{ store.state.userDetails.name.substring(0, 5) + '...' }} -->
+          &nbsp;{{ userName }}
         </q-btn>
 
       </q-toolbar>
@@ -71,7 +72,14 @@ export default defineComponent({
       if (!store.state.logoutError) router.push('/auth')
     }
 
-    return { title, route, router, store, logoutUser };
+    const userName = computed(() => {
+      if (store.state.userDetails.name.length >= 5) {
+        return store.state.userDetails.name.substring(0, 5) + '...'        
+      }
+      return store.state.userDetails.name
+    })
+
+    return { title, route, router, store, logoutUser, userName };
   },
 });
 </script>
@@ -79,5 +87,11 @@ export default defineComponent({
 <style scoped>
 .q-toolbar .q-btn {
   line-height: 1.2;
+  /* display: flex;
+  flex-direction: column; */
+  text-align-last: left;
+}
+.notranslate.material-icons.q-icon {
+  margin-right: 0.5rem;
 }
 </style>
