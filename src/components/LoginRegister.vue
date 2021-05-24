@@ -20,23 +20,21 @@
     <p class="text-red" v-if="tab === 'register'">{{ store.state.registerError }}</p>
     <p class="text-red" v-else>{{ store.state.loginError }}</p>
     <div class="row">
-      <!-- <q-space /> -->
-      <q-btn color="primary" :label="tab" type="submit" />
       <q-space />
-      <q-btn color="secondary" label="logout" @click="userLogout" />
-      <!-- <q-btn color="secondary" label="logout" /> -->
+      <q-btn color="primary" :label="tab" type="submit" />
     </div>
   </q-form>
 </template>
 
 <script>
 import { defineComponent, ref, inject } from "vue";
-// import { timestamp } from '../firebase/config'
+import { useRouter } from 'vue-router'
 
 export default defineComponent({
   props: ["tab"],
   setup(props) {
     const store = inject('store')
+    const router = useRouter()
 
     const formData = ref({
       name: "",
@@ -48,9 +46,13 @@ export default defineComponent({
     const submitForm = () => {
       if (props.tab === "login") {
         store.methods.loginUser(formData.value)
+
+        if (!store.state.loginError) router.push('/')
         // console.log("login the user");
       } else {
         store.methods.registerUser(formData.value)
+        
+        if (!store.state.registerError) router.push('/')
       }
     };
 

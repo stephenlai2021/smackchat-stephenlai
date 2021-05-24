@@ -15,7 +15,8 @@
     "core-js": "^3.6.5",
     "firebase": "^8.6.1",
     "localbase": "^0.7.5",
-    "quasar": "^2.0.0-beta.1"
+    "quasar": "^2.0.0-beta.1",
+    "vue-router": "^4.0.8"
   },
   "devDependencies": {
     "@babel/eslint-parser": "^7.13.14",
