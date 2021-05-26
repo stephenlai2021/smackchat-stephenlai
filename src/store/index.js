@@ -1,11 +1,13 @@
-import { reactive, readonly } from "vue";
+import { reactive, readonly, ref, watchEffect } from "vue";
 import { auth, db } from "../firebase/config";
 
 const state = reactive({
   registerError: null,
   loginError: null,
   logoutError: null,
-  userDetails: null
+  userDetails: null,
+  users: null,
+  getRtdbError: null
 });
 
 const methods = {
@@ -23,8 +25,7 @@ const methods = {
       // if (res.data() === state.userDetails) {
       //   state.loginError = 'This account is already logged in !'
       //   return
-      // }
-      
+      // }      
       
       console.log("current user: ", state.userDetails);
 
@@ -80,15 +81,36 @@ const methods = {
       console.log(`logout error: ${state.logoutError}`);
     }
   },
+  getRealtimeDB(collection) {
+    let collectionRef = db.collection(collection).orderBy("createdAt");
+
+    const unsub = collectionRef.onSnapshot(
+      (snap) => {
+        console.log("snapshot");
+        let results = [];
+        snap.docs.forEach((doc) => {
+          results.push({ ...doc.data(), id: doc.id });
+        });
+
+        // hide current user from user page
+        state.users = results.filter(
+          (result) => result.id !== auth.currentUser.uid
+        );
+        state.getRtdbError = null;
+      },
+      (err) => {
+        console.log(err.message);
+        state.users = null;
+        state.getRtdbError = "could not fetch data";
+      }
+    );
+
+    watchEffect((onInvalidate) => onInvalidate(() => unsub()))
+  },
   handleAuthStateChanged() {
     auth.onAuthStateChanged(async (_user) => {
       if (_user) {
         // user is logged in.
-
-        // get current user from auth
-        // state.user = auth.currentUser;
-        // console.log(`current user: ${JSON.stringify(state.user)}`)
-
         // get current user from firestore
         const userId = auth.currentUser.uid;
         const res = await db.collection("smackchat-users").doc(userId).get();

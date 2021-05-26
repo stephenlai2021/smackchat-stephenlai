@@ -2,7 +2,7 @@
   <q-page class="flex q-pa-md">
     <q-list class="full-width">
       <q-item
-        v-for="user in users"
+        v-for="user in store.state.users"
         :key="user.id"
         class="q-my-sm"
         clickable
@@ -28,17 +28,17 @@
 </template>
 
 <script>
-import { defineComponent, ref } from "vue";
-import getRealtimeDB from '../composables/getRealtimeDB'
-import { auth } from '../firebase/config'
+import { defineComponent, ref, inject, onMounted } from "vue";
 
 export default defineComponent({
   setup() {
-    const { rtdbDocs } = getRealtimeDB('smackchat-users')
+    const store = inject('store')
 
-    const users = ref(rtdbDocs);
-
-    return { users };
+    onMounted(() => {
+      store.methods.getRealtimeDB('smackchat-users')
+    })
+    
+    return { store };
   },
 });
 </script>

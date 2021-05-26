@@ -87,11 +87,6 @@ export default defineComponent({
 <style scoped>
 .q-toolbar .q-btn {
   line-height: 1.2;
-  /* display: flex;
-  flex-direction: column; */
   text-align-last: left;
-}
-.notranslate.material-icons.q-icon {
-  margin-right: 0.5rem;
 }
 </style>
