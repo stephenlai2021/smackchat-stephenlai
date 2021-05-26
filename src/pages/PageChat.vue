@@ -1,7 +1,7 @@
 <template>
   <q-page class="flex column">
     <q-banner class="bg-grey-4 text-center"> User is offline. </q-banner>
-    <div class="q-pa-md column col justify-end" ref="chats">
+    <div class="q-pa-lg column col justify-end" ref="chats">
       <q-chat-message
         v-for="message in messages"
         :key="message.text"
