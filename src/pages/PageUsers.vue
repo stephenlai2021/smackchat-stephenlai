@@ -1,5 +1,5 @@
 <template>
-  <q-page class="flex q-pa-md">
+  <q-page class="flex q-pa-sm">
     <q-list class="full-width">
       <q-item
         v-for="user in store.state.users"

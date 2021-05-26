@@ -65,10 +65,10 @@ export default defineComponent({
       return "Something went wrong 😅😅😅 ";
     });
 
-    watch(store.state.userDetails, () => {
-      console.log('watch function ran')
-      // if (!store.state.userDetails) router.push('/auth')
-    })
+    // watch(store.state.userDetails, () => {
+    //   console.log('watch function ran')
+    //   // if (!store.state.userDetails) router.push('/auth')
+    // })
 
     const logoutUser = async () => {
       store.methods.logoutUser()
