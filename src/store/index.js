@@ -91,6 +91,7 @@ const methods = {
         snap.docs.forEach((doc) => {
           results.push({ ...doc.data(), id: doc.id });
         });
+        state.users = results
 
         // hide current user from user page
         state.users = results.filter(
@@ -120,6 +121,7 @@ const methods = {
       } else {
         // user is logged out.
         console.log("user logout");
+        state.userDetails = null;
       }
     });
   },

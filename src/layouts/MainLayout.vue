@@ -18,7 +18,7 @@
         <q-btn
           v-if="!store.state.userDetails"
           @click="router.push('/auth')"
-          class="absolute-right q-pr-sm"
+          class="absolute-right q-pr-md"
           icon="account_circle"
           label="Login"
           no-caps
@@ -29,14 +29,13 @@
         <q-btn
           v-else
           @click="logoutUser"
-          class="absolute-right q-pr-sm"
+          class="absolute-right q-pr-md"
           icon="account_circle"
           no-caps
           flat
           dense
         >
           &nbsp;Logout<br>
-          <!-- &nbsp;{{ store.state.userDetails.name.substring(0, 5) + '...' }} -->
           &nbsp;{{ userName }}
         </q-btn>
 
@@ -50,7 +49,7 @@
 </template>
 
 <script>
-import { defineComponent, computed, inject } from "vue";
+import { defineComponent, computed, inject, watch, watchEffect } from "vue";
 import { useRouter, useRoute } from "vue-router";
 
 export default defineComponent({
@@ -66,10 +65,16 @@ export default defineComponent({
       return "Something went wrong 😅😅😅 ";
     });
 
-    const logoutUser = () => {
+    watch(store.state.userDetails, () => {
+      console.log('watch function ran')
+      // if (!store.state.userDetails) router.push('/auth')
+    })
+
+    const logoutUser = async () => {
       store.methods.logoutUser()
 
       if (!store.state.logoutError) router.push('/auth')
+      // if (!store.state.userDetails) router.push('/auth')
     }
 
     const userName = computed(() => {
