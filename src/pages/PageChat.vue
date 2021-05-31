@@ -1,13 +1,13 @@
 <template>
   <q-page class="flex column">
-    <q-banner class="bg-grey-4 text-center"> User is offline. </q-banner>
+    <q-banner class="bg-grey-4 text-center"> {{ store.state.user.name }} is {{ store.state.user.online ? 'online' : 'offline'  }} </q-banner>
     <div class="q-pa-lg column col justify-end" ref="chats">
       <q-chat-message
         v-for="message in messages"
         :key="message.text"
-        :name="message.from"
+        :name="store.state.user.name"
         :text="[message.text]"
-        :sent="message.from === 'me' ? true : false"
+        :sent="message.id === auth.currentUser.uid ? false : message.id === store.state.user.id ? true : null"
       />
       <!-- <div class="error">{{ error }}</div> -->
     </div>
@@ -34,28 +34,36 @@
 </template>
 
 <script>
-import { defineComponent, ref, onUpdated, watchEffect, watch } from "vue";
+import { defineComponent, ref, onMounted, watch, inject } from "vue";
 import getRealtimeDB from "../composables/getRealtimeDB";
 import addCloudDocument from "../composables/addCloudDocument";
-import { timestamp } from "../firebase/config";
+import { auth, db } from "../firebase/config";
 
 export default defineComponent({
   setup() {
+    const store = inject('store')
     const { rtdbDocs, getRtdbError } = getRealtimeDB("smackchat-chats");
     const { addCloudDoc, addCloudError } = addCloudDocument("smackchat-chats");
 
     const newMessage = ref("");
     const messages = ref(rtdbDocs);
 
+    onMounted(() => {
+      // store.methods.getAllChats('smackchat-chats')
+      // console.log(`user id: ${store.state.userId}`)
+    })
+
     const sendMessage = async () => {
       if (!newMessage.value) return;
 
       const userMessage = {
         text: newMessage.value,
-        from: "me",
+        id: auth.currentUser.uid,
         createdAt: Date.now()
       };
-      await addCloudDoc(userMessage);
+      
+      // store.methods.addDocument('smackchat-chats', userMessage)
+      await addCloudDoc(userMessage)
 
       newMessage.value = "";
     };
@@ -70,7 +78,7 @@ export default defineComponent({
       }, 20);
     })
     
-    return { newMessage, messages, sendMessage, chats };
+    return { newMessage, messages, sendMessage, chats, auth, store };
   },
 });
 </script>

@@ -1,19 +1,17 @@
 import { ref, watchEffect } from "vue";
 import { db, auth } from "../firebase/config";
 
-const getRealtimeDB = (collection) => {
+const getChatMessages = (collection) => {
   const rtdbDocs = ref(null);
   const getRtdbError = ref(null);
 
   let collectionRef = db.collection(collection).orderBy('createdAt')
-  // let collectionRef = db.collection(collection)
 
   const unsub = collectionRef.onSnapshot(snap => {
     console.log('snapshot')
     let results = []
     snap.docs.forEach(doc => {
       results.push({ ...doc.data(), id: doc.id })
-      // results.push({ ...doc.data() })
     })
 
     // get users details info (email, id, name, online, password)
@@ -36,4 +34,4 @@ const getRealtimeDB = (collection) => {
   return { rtdbDocs, getRtdbError }
 };
 
-export default getRealtimeDB;
+export default getChatMessages;

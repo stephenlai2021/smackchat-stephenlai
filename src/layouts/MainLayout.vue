@@ -62,7 +62,8 @@ export default defineComponent({
       if (route.fullPath === "/") return "Smackchat";
       if (route.fullPath === "/chat") return "Chat";
       if (route.fullPath === "/auth") return "Login";
-      return "Something went wrong 😅😅😅 ";
+      // return "Something went wrong 😅😅😅 ";
+      return null
     });
 
     // watch(store.state.userDetails, () => {

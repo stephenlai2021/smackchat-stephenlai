@@ -7,7 +7,7 @@
         class="q-my-sm"
         clickable
         v-ripple
-        to="/chat"
+        @click="handleClick(user)"
       >
         <q-item-section avatar>
           <q-avatar color="primary" text-color="white">
@@ -29,16 +29,26 @@
 
 <script>
 import { defineComponent, ref, inject, onMounted } from "vue";
+import { useRouter, useRoute } from 'vue-router'
 
 export default defineComponent({
   setup() {
     const store = inject('store')
 
+    const router = useRouter()
+    const route = useRoute()
+
     onMounted(() => {
-      store.methods.getRealtimeDB('smackchat-users')
+      store.methods.getAllUsers('smackchat-users')
     })
+
+    const handleClick = (user) => {
+      store.methods.saveUserId(user.id)
+      store.methods.saveUser(user)
+      router.push(`/chat/${user.id}}`)
+    }
     
-    return { store };
+    return { store, handleClick };
   },
 });
 </script>
