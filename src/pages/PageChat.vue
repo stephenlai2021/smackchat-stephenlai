@@ -9,12 +9,14 @@
         :text="[message.text]"
         :sent="message.from === auth.currentUser.uid ? true : false"
       />
-        <!-- :sent="message.from === auth.currentUser.uid ? false : message.id === store.state.user.id ? true : null" -->
+        <!-- :sent="message.from === auth.currentUser.uid ? true
+         : message.from === store.state.userDetails.name ? false 
+         : null" -->
       <!-- <div class="error">{{ error }}</div> -->
     </div>
     <q-footer elevated>
       <q-toolbar>
-        <q-form @submit="sendMessage" class="full-width">
+        <q-form class="full-width">
           <q-input
             bg-color="white"
             rounded
@@ -25,7 +27,8 @@
             @keypress.enter.prevent="sendMessage"
           >
             <template v-slot:after>
-              <q-btn round dense flat type="submit" icon="send" color="white" />
+              <!-- <q-btn round dense flat type="submit" icon="send" color="white" /> -->
+              <q-btn round dense flat icon="send" color="white" @click="sendMessage" />
             </template>
           </q-input>
         </q-form>
