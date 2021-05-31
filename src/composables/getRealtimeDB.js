@@ -12,8 +12,8 @@ const getRealtimeDB = (collection) => {
     console.log('snapshot')
     let results = []
     snap.docs.forEach(doc => {
-      results.push({ ...doc.data(), id: doc.id })
-      // results.push({ ...doc.data() })
+      // results.push({ ...doc.data(), id: doc.id })
+      results.push({ ...doc.data() })
     })
 
     // get users details info (email, id, name, online, password)

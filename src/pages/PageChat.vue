@@ -5,10 +5,11 @@
       <q-chat-message
         v-for="message in messages"
         :key="message.text"
-        :name="store.state.user.name"
+        :name="store.state.userDetails.name"
         :text="[message.text]"
-        :sent="message.id === auth.currentUser.uid ? false : message.id === store.state.user.id ? true : null"
+        :sent="message.from === 'me' ? false : true"
       />
+        <!-- :sent="message.from === auth.currentUser.uid ? false : message.id === store.state.user.id ? true : null" -->
       <!-- <div class="error">{{ error }}</div> -->
     </div>
     <q-footer elevated>
@@ -58,7 +59,8 @@ export default defineComponent({
 
       const userMessage = {
         text: newMessage.value,
-        id: auth.currentUser.uid,
+        from: auth.currentUser.uid,
+        // from: 'me',
         createdAt: Date.now()
       };
       
