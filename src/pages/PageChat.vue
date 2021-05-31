@@ -7,7 +7,7 @@
         :key="message.text"
         :name="store.state.userDetails.name"
         :text="[message.text]"
-        :sent="message.from === 'me' ? false : true"
+        :sent="message.from === auth.currentUser.uid ? true : false"
       />
         <!-- :sent="message.from === auth.currentUser.uid ? false : message.id === store.state.user.id ? true : null" -->
       <!-- <div class="error">{{ error }}</div> -->
