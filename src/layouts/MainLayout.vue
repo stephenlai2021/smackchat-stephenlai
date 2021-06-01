@@ -60,7 +60,8 @@ export default defineComponent({
 
     const title = computed(() => {
       if (route.fullPath === "/") return "Smackchat";
-      if (route.fullPath === "/chat") return "Chat";
+      if (route.fullPath === `/chat/${route.params.userId}`) return otherUserDetails.value.name;
+      // if (route.fullPath === `/chat/${route.params.userId}`) return store.getters.otherUserDetails;
       if (route.fullPath === "/auth") return "Login";
       // return "Something went wrong 😅😅😅 ";
       return null
@@ -70,6 +71,10 @@ export default defineComponent({
     //   console.log('watch function ran')
     //   // if (!store.state.userDetails) router.push('/auth')
     // })
+
+    const otherUserDetails = computed(() => {
+      return store.state.users.find(user => user.id === route.params.userId)
+    });
 
     const logoutUser = async () => {
       store.methods.logoutUser()
@@ -85,7 +90,8 @@ export default defineComponent({
       return store.state.userDetails.name
     })
 
-    return { title, route, router, store, logoutUser, userName };
+    return { title, route, router, store, logoutUser, userName, otherUserDetails };
+    // return { title, route, router, store, logoutUser, userName };
   },
 });
 </script>

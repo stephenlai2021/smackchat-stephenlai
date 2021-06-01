@@ -1,5 +1,8 @@
 import { reactive, readonly, ref, watchEffect } from "vue";
 import { auth, db } from "../firebase/config";
+import { useRoute, useRouter } from 'vue-router'
+
+const route = useRoute()
 
 const state = reactive({
   userDetails: null,
@@ -18,21 +21,15 @@ const state = reactive({
 const methods = {
   async loginUser(payload) {
     const { email, password } = payload;
-
+    const router = useRouter();
+    
     try {
       // user login successfully
       await auth.signInWithEmailAndPassword(email, password);
-
+      state.loginError = null;
+      
       // get current user id
       const userId = auth.currentUser.uid;
-
-      // const res = await db.collection("smackchat-users").doc(userId).get();
-      // if (res.data() === state.userDetails) {
-      //   state.loginError = 'This account is already logged in !'
-      //   return
-      // }
-
-      console.log("current user: ", state.userDetails);
 
       // set user online status to true
       await db
@@ -40,7 +37,7 @@ const methods = {
         .doc(userId)
         .update({ online: true });
 
-      state.loginError = null;
+      // router.push('/')
     } catch (err) {
       state.loginError = err.message;
     }
@@ -100,6 +97,7 @@ const methods = {
         state.users = results.filter(
           (result) => result.id !== auth.currentUser.uid
         );
+        // console.log(`all users: ${JSON.stringify(state.users)}`)
         state.getUsersError = null;
       },
       (err) => {
@@ -153,11 +151,11 @@ const methods = {
   handleAuthStateChanged() {
     auth.onAuthStateChanged(async (_user) => {
       if (_user) {
-        // user is logged in.
+        // user is logged in
         // get current user from firestore
         const userId = auth.currentUser.uid;
         const res = await db.collection("smackchat-users").doc(userId).get();
-        state.userDetails = res.data();
+        state.userDetails = { ...res.data(), id: userId }
         console.log("current user: ", state.userDetails);
       } else {
         // user is logged out.
@@ -172,6 +170,9 @@ const getters = {
   counterSquared() {
     return state.counter * state.counter;
   },
+  // otherUserDetails() {
+  //   return state.user.name
+  // }
 };
 
 export default {

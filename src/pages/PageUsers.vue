@@ -9,6 +9,7 @@
         v-ripple
         @click="handleClick(user)"
       >
+        <!-- :to="`/chat/${user.id}`" -->
         <q-item-section avatar>
           <q-avatar color="primary" text-color="white">
             {{ user.name.charAt(0).toUpperCase() }}
@@ -43,9 +44,10 @@ export default defineComponent({
     })
 
     const handleClick = (user) => {
-      store.methods.saveUserId(user.id)
+      // store.methods.saveUserId(user.id)
       store.methods.saveUser(user)
-      router.push(`/chat/${user.id}}`)
+      router.push(`/chat/${user.id}`)
+      console.log(`other user id: ${user.id}`)
     }
     
     return { store, handleClick };
