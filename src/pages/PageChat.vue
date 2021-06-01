@@ -1,17 +1,15 @@
 <template>
   <q-page class="flex column">
-    <q-banner class="bg-grey-4 text-center"> {{ store.state.user.name }} is {{ store.state.user.online ? 'online' : 'offline'  }} </q-banner>
+    <!-- <q-banner class="bg-grey-4 text-center"> {{ store.state.user.name }} is {{ store.state.user.online ? 'online' : 'offline'  }} </q-banner> -->
+    <q-banner class="bg-grey-4 text-center"></q-banner>
     <div class="q-pa-lg column col justify-end" ref="chats">
       <q-chat-message
         v-for="message in messages"
         :key="message.text"
-        :name="store.state.userDetails.name"
+        :name="message.from === auth.currentUser.uid ? store.state.userDetails.name : 'them'"
         :text="[message.text]"
         :sent="message.from === auth.currentUser.uid ? true : false"
       />
-        <!-- :sent="message.from === auth.currentUser.uid ? true
-         : message.from === store.state.userDetails.name ? false 
-         : null" -->
       <!-- <div class="error">{{ error }}</div> -->
     </div>
     <q-footer elevated>
@@ -38,7 +36,8 @@
 </template>
 
 <script>
-import { defineComponent, ref, onMounted, watch, inject } from "vue";
+import { defineComponent, ref, onMounted, computed, watch, inject } from "vue";
+import { useRoute } from 'vue-router'
 import getRealtimeDB from "../composables/getRealtimeDB";
 import addCloudDocument from "../composables/addCloudDocument";
 import { auth, db } from "../firebase/config";
@@ -48,6 +47,7 @@ export default defineComponent({
     const store = inject('store')
     const { rtdbDocs, getRtdbError } = getRealtimeDB("smackchat-chats");
     const { addCloudDoc, addCloudError } = addCloudDocument("smackchat-chats");
+    const route = useRoute()
 
     const newMessage = ref("");
     const messages = ref(rtdbDocs);
@@ -63,7 +63,6 @@ export default defineComponent({
       const userMessage = {
         text: newMessage.value,
         from: auth.currentUser.uid,
-        // from: 'me',
         createdAt: Date.now()
       };
       
@@ -72,6 +71,10 @@ export default defineComponent({
 
       newMessage.value = "";
     };
+
+    // const otherUserDetails = computed(() => {
+    //   return store.state.users[route.params.userId]
+    // })
 
     // auto-scroll to bottom of chats
     const chats = ref(null);
@@ -83,7 +86,7 @@ export default defineComponent({
       }, 20);
     })
     
-    return { newMessage, messages, sendMessage, chats, auth, store };
+    return { newMessage, messages, sendMessage, chats, auth, store, route };
   },
 });
 </script>
