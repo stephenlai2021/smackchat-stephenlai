@@ -172,12 +172,6 @@ const methods = {
 const getters = {
   counterSquared() {
     return state.counter * state.counter;
-  },
-  otherUserDetails() {
-    if (state.user) {
-      return state.user
-    }
-    return null
   }
 };
 

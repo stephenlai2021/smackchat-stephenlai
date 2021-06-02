@@ -7,7 +7,7 @@
     </div>
     <div v-else></div>
     <div v-if="store.state.user && store.state.userDetails" class="q-pa-lg column col justify-end" ref="chats">
-      <q-chat-message :label="timer" />
+      <!-- <q-chat-message :label="timer" /> -->
       <q-chat-message
         v-for="message in messages"
         :key="message.text"
