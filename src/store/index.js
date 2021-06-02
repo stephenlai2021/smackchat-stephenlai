@@ -173,9 +173,12 @@ const getters = {
   counterSquared() {
     return state.counter * state.counter;
   },
-  // otherUserDetails() {
-  //   return state.user.name
-  // }
+  otherUserDetails() {
+    if (state.user) {
+      return state.user
+    }
+    return null
+  }
 };
 
 export default {

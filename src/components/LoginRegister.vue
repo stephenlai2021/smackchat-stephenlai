@@ -50,7 +50,6 @@ export default defineComponent({
         setTimeout(() => {
           if (!store.state.loginError) router.push('/')
         }, 1000)
-        // console.log("login the user");
       } else {
         store.methods.registerUser(formData.value)
         

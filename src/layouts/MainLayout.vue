@@ -51,10 +51,7 @@
 import {
   defineComponent,
   computed,
-  onMounted,
-  inject,
-  watch,
-  watchEffect,
+  inject
 } from "vue";
 import { useRouter, useRoute } from "vue-router";
 import { auth } from "../firebase/config";
@@ -67,21 +64,12 @@ export default defineComponent({
 
     const title = computed(() => {
       if (route.fullPath === "/") return "Smackchat";
-      if (route.fullPath === `/chat/${route.params.userId}`)
-        return otherUserDetails.value.name;
+      if (route.fullPath === `/chat/${route.params.userId}`) {
+        if (store.state.user)
+        return store.state.user.name;
+      }
       if (route.fullPath === "/auth") return "Login";
       return null;
-    });
-
-    // watch(store.state.userDetails, () => {
-    //   console.log('watch function ran')
-    //   // if (!store.state.userDetails) router.push('/auth')
-    // })
-
-    onMounted(() => {});
-
-    const otherUserDetails = computed(() => {
-      return store.state.users.find((user) => user.id === route.params.userId);
     });
 
     const logoutUser = async () => {
@@ -104,10 +92,8 @@ export default defineComponent({
       store,
       logoutUser,
       userName,
-      otherUserDetails,
       auth,
     };
-    // return { title, route, router, store, logoutUser, userName };
   },
 });
 </script>

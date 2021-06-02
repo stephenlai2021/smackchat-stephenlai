@@ -1,13 +1,12 @@
 <template>
   <q-page class="flex column">
-    <!-- <q-banner class="bg-grey-4 text-center">
-      {{ otherUserDetails.name }} is
-      {{ otherUserDetails.online ? "online" : "offline" }}
-    </q-banner> -->
-    <q-banner v-if="!otherUserDetails.online" class="bg-grey-4 text-center">
-      {{ otherUserDetails.name }} is offline
-    </q-banner>
-    <div class="q-pa-lg column col justify-end" ref="chats">
+    <div v-if="store.state.user">
+      <q-banner v-if="!store.state.user.online" class="bg-grey-4 text-center">
+        {{ store.state.user.name }} is offline
+      </q-banner>
+    </div>
+    <div v-else></div>
+    <div v-if="store.state.user && store.state.userDetails" class="q-pa-lg column col justify-end" ref="chats">
       <q-chat-message :label="timer" />
       <q-chat-message
         v-for="message in messages"
@@ -21,8 +20,24 @@
         :name="
           message.from === auth.currentUser.uid
             ? store.state.userDetails.name
-            : otherUserDetails.name
+            : store.state.user.name
         "
+        :text="[message.text]"
+        :sent="message.from === auth.currentUser.uid ? true : false"
+      />
+    </div>
+    <div v-else class="q-pa-lg column col justify-end" ref="chats">
+      <q-chat-message :label="timer" />
+      <q-chat-message
+        v-for="message in messages"
+        :key="message.text"
+        stamp="4 minutes ago"
+        :avatar="
+          message.from === auth.currentUser.uid
+            ? 'https://cdn.quasar.dev/img/avatar1.jpg'
+            : 'https://cdn.quasar.dev/img/avatar5.jpg'
+        "
+        name=null
         :text="[message.text]"
         :sent="message.from === auth.currentUser.uid ? true : false"
       />
@@ -74,16 +89,6 @@ export default defineComponent({
     const messages = ref(rtdbDocs);
     const timer = ref(null);
 
-    // onMounted(() => {
-    //   console.log(`current route: /chat/${route.params.userId}`);
-    //   console.log(`otherUserDetails: ${JSON.stringify(otherUserDetails)}`)
-    //   otherUserDetails.value = store.state.users.find(user => user.id === route.params.userId)
-    // });
-
-    const otherUserDetails = computed(() => {
-      return store.state.users.find((user) => user.id === route.params.userId);
-    });
-
     const sendMessage = async () => {
       if (!newMessage.value) return;
 
@@ -120,8 +125,7 @@ export default defineComponent({
       auth,
       store,
       route,
-      otherUserDetails,
-      timer,
+      timer
     };
   },
 });
