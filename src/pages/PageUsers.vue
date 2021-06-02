@@ -11,7 +11,8 @@
       >
         <q-item-section avatar>
           <q-avatar color="primary" text-color="white">
-            {{ user.name.charAt(0).toUpperCase() }}
+            <!-- {{ user.name.charAt(0).toUpperCase() }} -->
+            <img src="/batman.png" alt="batman image">
           </q-avatar>
         </q-item-section>
 

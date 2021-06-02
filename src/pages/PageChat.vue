@@ -12,8 +12,8 @@
         stamp="4 minutes ago"
         :avatar="
           message.from === auth.currentUser.uid
-            ? '/ninja.png'
-            : 'batman.png'
+            ? 'https://cdn.quasar.dev/img/avatar1.jpg'
+            : 'https://cdn.quasar.dev/img/avatar5.jpg'
         "
         :name="
           message.from === auth.currentUser.uid
