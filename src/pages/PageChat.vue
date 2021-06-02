@@ -61,10 +61,12 @@ export default defineComponent({
 
     const newMessage = ref("");
     const messages = ref(rtdbDocs);
+    // const otherUserDetails = ref({})
 
     onMounted(() => {
       console.log(`current route: /chat/${route.params.userId}`);
       console.log(`otherUserDetails: ${JSON.stringify(otherUserDetails)}`)
+      // otherUserDetails.value = store.state.users.find(user => user.id === route.params.userId)
     });
 
     const otherUserDetails = computed(() => {

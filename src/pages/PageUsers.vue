@@ -9,7 +9,6 @@
         v-ripple
         @click="handleClick(user)"
       >
-        <!-- :to="`/chat/${user.id}`" -->
         <q-item-section avatar>
           <q-avatar color="primary" text-color="white">
             {{ user.name.charAt(0).toUpperCase() }}

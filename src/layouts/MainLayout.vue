@@ -14,7 +14,7 @@
         <q-toolbar-title class="absolute-center">
           {{ title }}
         </q-toolbar-title>
-
+        
         <q-btn
           v-if="!store.state.userDetails"
           @click="router.push('/auth')"
@@ -35,10 +35,9 @@
           flat
           dense
         >
-          &nbsp;Logout<br>
+          &nbsp;Logout<br />
           &nbsp;{{ userName }}
         </q-btn>
-
       </q-toolbar>
     </q-header>
 
@@ -49,22 +48,29 @@
 </template>
 
 <script>
-import { defineComponent, computed, inject, watch, watchEffect } from "vue";
+import {
+  defineComponent,
+  computed,
+  onMounted,
+  inject,
+  watch,
+  watchEffect,
+} from "vue";
 import { useRouter, useRoute } from "vue-router";
+import { auth } from "../firebase/config";
 
 export default defineComponent({
   setup() {
     const router = useRouter();
     const route = useRoute();
-    const store = inject('store')
+    const store = inject("store");
 
     const title = computed(() => {
       if (route.fullPath === "/") return "Smackchat";
-      if (route.fullPath === `/chat/${route.params.userId}`) return otherUserDetails.value.name;
-      // if (route.fullPath === `/chat/${route.params.userId}`) return store.getters.otherUserDetails;
+      if (route.fullPath === `/chat/${route.params.userId}`)
+        return otherUserDetails.value.name;
       if (route.fullPath === "/auth") return "Login";
-      // return "Something went wrong 😅😅😅 ";
-      return null
+      return null;
     });
 
     // watch(store.state.userDetails, () => {
@@ -72,25 +78,35 @@ export default defineComponent({
     //   // if (!store.state.userDetails) router.push('/auth')
     // })
 
+    onMounted(() => {});
+
     const otherUserDetails = computed(() => {
-      return store.state.users.find(user => user.id === route.params.userId)
+      return store.state.users.find((user) => user.id === route.params.userId);
     });
 
     const logoutUser = async () => {
-      store.methods.logoutUser()
+      store.methods.logoutUser();
 
-      if (!store.state.logoutError) router.push('/auth')
-      // if (!store.state.userDetails) router.push('/auth')
-    }
+      if (!store.state.logoutError) router.push("/auth");
+    };
 
     const userName = computed(() => {
       if (store.state.userDetails.name.length >= 5) {
-        return store.state.userDetails.name.substring(0, 5) + '...'        
+        return store.state.userDetails.name.substring(0, 5) + "...";
       }
-      return store.state.userDetails.name
-    })
+      return store.state.userDetails.name;
+    });
 
-    return { title, route, router, store, logoutUser, userName, otherUserDetails };
+    return {
+      title,
+      route,
+      router,
+      store,
+      logoutUser,
+      userName,
+      otherUserDetails,
+      auth,
+    };
     // return { title, route, router, store, logoutUser, userName };
   },
 });

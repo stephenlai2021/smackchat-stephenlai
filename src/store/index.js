@@ -21,7 +21,6 @@ const state = reactive({
 const methods = {
   async loginUser(payload) {
     const { email, password } = payload;
-    const router = useRouter();
     
     try {
       // user login successfully
@@ -47,6 +46,9 @@ const methods = {
 
     try {
       await auth.createUserWithEmailAndPassword(email, password);
+      
+      // auth.currentUser.displayName = name
+      // console.log(`displayName: ${auth.currentUser.displayName}`);
 
       const userId = auth.currentUser.uid;
 
@@ -91,6 +93,7 @@ const methods = {
         let results = [];
         snap.docs.forEach((doc) => {
           results.push({ ...doc.data(), id: doc.id });
+          // results.push(doc.data());
         });
 
         // hide current user from user page
