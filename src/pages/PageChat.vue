@@ -1,8 +1,11 @@
 <template>
   <q-page class="flex column">
-    <q-banner class="bg-grey-4 text-center">
+    <!-- <q-banner class="bg-grey-4 text-center">
       {{ otherUserDetails.name }} is
       {{ otherUserDetails.online ? "online" : "offline" }}
+    </q-banner> -->
+    <q-banner v-if="!otherUserDetails.online" class="bg-grey-4 text-center">
+      {{ otherUserDetails.name }} is offline
     </q-banner>
     <div class="q-pa-lg column col justify-end" ref="chats">
       <q-chat-message :label="timer" />
