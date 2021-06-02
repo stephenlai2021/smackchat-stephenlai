@@ -1,10 +1,20 @@
 <template>
   <q-page class="flex column">
-    <q-banner class="bg-grey-4 text-center"> {{ otherUserDetails.name }} is {{ otherUserDetails.online ? 'online' : 'offline'  }} </q-banner>
+    <q-banner class="bg-grey-4 text-center">
+      {{ otherUserDetails.name }} is
+      {{ otherUserDetails.online ? "online" : "offline" }}
+    </q-banner>
     <div class="q-pa-lg column col justify-end" ref="chats">
+      <q-chat-message :label="timer" />
       <q-chat-message
         v-for="message in messages"
         :key="message.text"
+        stamp="4 minutes ago"
+        :avatar="
+          message.from === auth.currentUser.uid
+            ? '/ninja.png'
+            : 'batman.png'
+        "
         :name="
           message.from === auth.currentUser.uid
             ? store.state.userDetails.name
@@ -13,7 +23,6 @@
         :text="[message.text]"
         :sent="message.from === auth.currentUser.uid ? true : false"
       />
-      <!-- <div class="error">{{ error }}</div> -->
     </div>
     <q-footer elevated>
       <q-toolbar>
@@ -28,7 +37,6 @@
             @keypress.enter.prevent="sendMessage"
           >
             <template v-slot:after>
-              <!-- <q-btn round dense flat type="submit" icon="send" color="white" /> -->
               <q-btn
                 round
                 dense
@@ -61,16 +69,16 @@ export default defineComponent({
 
     const newMessage = ref("");
     const messages = ref(rtdbDocs);
-    // const otherUserDetails = ref({})
+    const timer = ref(null);
 
-    onMounted(() => {
-      console.log(`current route: /chat/${route.params.userId}`);
-      console.log(`otherUserDetails: ${JSON.stringify(otherUserDetails)}`)
-      // otherUserDetails.value = store.state.users.find(user => user.id === route.params.userId)
-    });
+    // onMounted(() => {
+    //   console.log(`current route: /chat/${route.params.userId}`);
+    //   console.log(`otherUserDetails: ${JSON.stringify(otherUserDetails)}`)
+    //   otherUserDetails.value = store.state.users.find(user => user.id === route.params.userId)
+    // });
 
     const otherUserDetails = computed(() => {
-      return store.state.users.find(user => user.id === route.params.userId)
+      return store.state.users.find((user) => user.id === route.params.userId);
     });
 
     const sendMessage = async () => {
@@ -82,7 +90,6 @@ export default defineComponent({
         createdAt: Date.now(),
       };
 
-      // store.methods.addDocument('smackchat-chats', userMessage)
       await addCloudDoc(userMessage);
 
       newMessage.value = "";
@@ -90,6 +97,10 @@ export default defineComponent({
 
     // auto-scroll to bottom of chats
     const chats = ref(null);
+
+    setInterval(() => {
+      timer.value = new Date().toLocaleTimeString();
+    }, 1000);
 
     watch(messages, () => {
       console.log("watch function ran");
@@ -107,6 +118,7 @@ export default defineComponent({
       store,
       route,
       otherUserDetails,
+      timer,
     };
   },
 });
@@ -116,5 +128,4 @@ export default defineComponent({
 .q-message-container.row.items-end.no-wrap.reverse {
   margin-bottom: 15px;
 }
-
 </style>
