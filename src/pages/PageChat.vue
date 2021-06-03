@@ -9,7 +9,7 @@
     <div
       v-if="store.state.user && store.state.userDetails"
       :class="{ invisible: !showMessages }"
-      class="q-pa-lg column col justify-end"
+      class="q-pa-lg column col justify-end messages"
       ref="chats"
     >
       <!-- <q-chat-message :label="timer" /> -->
@@ -29,7 +29,7 @@
         "
         :text="[message.text]"
         :sent="message.from === auth.currentUser.uid ? true : false"
-        :bg-color="message.from === auth.currentUser.uid ? 'white' : 'light-green-5'"
+        :bg-color="message.from === auth.currentUser.uid ? 'white' : 'light-green-2'"
       />
     </div>
     <div v-else class="q-pa-lg column col justify-end" ref="chats">
@@ -46,6 +46,7 @@
         name="null"
         :text="[message.text]"
         :sent="message.from === auth.currentUser.uid ? true : false"
+        :bg-color="message.from === auth.currentUser.uid ? 'white' : 'light-green-2'"
       />
     </div>
     <q-footer elevated>
@@ -156,6 +157,10 @@ export default defineComponent({
 .q-message {
   z-index: 1;
 }
+// .messages {
+//   position: relative;
+//   top: 54px;
+// }
 .q-banner {
   top: 50px;
   z-index: 2;
