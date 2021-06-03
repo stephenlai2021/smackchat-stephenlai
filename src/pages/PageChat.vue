@@ -16,7 +16,7 @@
       <q-chat-message
         v-for="message in messages"
         :key="message.text"
-        stamp="4 minutes ago"
+        :stamp="message.createdAt"
         :avatar="
           message.from === auth.currentUser.uid
             ? 'https://cdn.quasar.dev/img/avatar1.jpg'
@@ -33,11 +33,11 @@
       />
     </div>
     <div v-else class="q-pa-lg column col justify-end" ref="chats">
-      <q-chat-message :label="timer" />
+      <!-- <q-chat-message :label="timer" /> -->
       <q-chat-message
         v-for="message in messages"
         :key="message.text"
-        stamp="4 minutes ago"
+        :stamp="message.createdAt"
         :avatar="
           message.from === auth.currentUser.uid
             ? 'https://cdn.quasar.dev/img/avatar1.jpg'
@@ -82,7 +82,8 @@ import { defineComponent, ref, onMounted, computed, watch, inject } from "vue";
 import { useRoute } from "vue-router";
 import getRealtimeDB from "../composables/getRealtimeDB";
 import addCloudDocument from "../composables/addCloudDocument";
-import { auth, db } from "../firebase/config";
+import { auth, timestamp } from "../firebase/config";
+import { formatDistanceToNow } from 'date-fns'
 
 export default defineComponent({
   setup() {
@@ -96,13 +97,23 @@ export default defineComponent({
     const timer = ref(null);
     const showMessages = ref(false);
 
+    const formattedMessages = computed(() => {
+      if (messages.value) {
+        return messages.value.map(message => {
+          let time = formatDistanceToNow(message.createdAt)
+          return { ...message, createdAt: time }
+        })
+      }
+      return null
+    })
+
     const sendMessage = async () => {
       if (!newMessage.value) return;
 
       const userMessage = {
         text: newMessage.value,
         from: auth.currentUser.uid,
-        createdAt: Date.now(),
+        createdAt: new Date().toLocaleString()
       };
 
       await addCloudDoc(userMessage);
@@ -133,8 +144,9 @@ export default defineComponent({
       auth,
       store,
       route,
-      timer,
+      // timer,
       showMessages,
+      formattedMessages
     };
   },
 });
