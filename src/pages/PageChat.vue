@@ -14,7 +14,7 @@
     >
       <!-- <q-chat-message :label="timer" /> -->
       <q-chat-message
-        v-for="message in messages"
+        v-for="message in formattedMessages"
         :key="message.text"
         :stamp="message.createdAt"
         :avatar="
@@ -35,7 +35,7 @@
     <div v-else class="q-pa-lg column col justify-end" ref="chats">
       <!-- <q-chat-message :label="timer" /> -->
       <q-chat-message
-        v-for="message in messages"
+        v-for="message in formattedMessages"
         :key="message.text"
         :stamp="message.createdAt"
         :avatar="
@@ -101,7 +101,7 @@ export default defineComponent({
     const formattedMessages = computed(() => {
       if (messages.value) {
         return messages.value.map(message => {
-          let time = formatDistanceToNow(message.createdAt)
+          let time = formatDistanceToNow(message.createdAt.toDate())
           return { ...message, createdAt: time }
         })
       }
@@ -114,7 +114,9 @@ export default defineComponent({
       const userMessage = {
         text: newMessage.value,
         from: auth.currentUser.uid,
-        createdAt: new Date().toLocaleString()
+        createdAt: new Date()
+        // createdAt: new Date().toLocaleString()
+        // createdAt: timestamp()
       };
 
       await addCloudDoc(userMessage);
@@ -145,9 +147,10 @@ export default defineComponent({
       auth,
       store,
       route,
-      // timer,
+      timer,
       showMessages,
-      formattedMessages
+      formattedMessages,
+      formatDistanceToNow
     };
   },
 });

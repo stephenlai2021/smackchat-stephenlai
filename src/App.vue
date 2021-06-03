@@ -10,7 +10,7 @@ export default defineComponent({
     provide('store', store)
 
     onMounted(() => {
-      store.methods.handleAuthStateChanged()
+      store.methods.handleAuthStateChanged()      
     })
   }
 })

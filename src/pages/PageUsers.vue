@@ -12,7 +12,7 @@
         <q-item-section avatar>
           <q-avatar color="primary" text-color="white">
             <!-- {{ user.name.charAt(0).toUpperCase() }} -->
-            <img src="/batman.png" alt="batman image">
+            <img src="/batman.png" alt="batman image" />
           </q-avatar>
         </q-item-section>
 
@@ -21,7 +21,9 @@
         </q-item-section>
 
         <q-item-section side>
-          <q-badge :color="user.online ? 'light-green-5' : 'grey-4'">{{ user.online ? 'Online' : 'Offline' }}</q-badge>
+          <q-badge :color="user.online ? 'light-green-5' : 'grey-4'">{{
+            user.online ? "Online" : "Offline"
+          }}</q-badge>
         </q-item-section>
       </q-item>
     </q-list>
@@ -30,26 +32,26 @@
 
 <script>
 import { defineComponent, ref, inject, onMounted } from "vue";
-import { useRouter, useRoute } from 'vue-router'
+import { useRouter, useRoute } from "vue-router";
 
 export default defineComponent({
   setup() {
-    const store = inject('store')
+    const store = inject("store");
 
-    const router = useRouter()
-    const route = useRoute()
+    const router = useRouter();
+    const route = useRoute();
 
     onMounted(() => {
-      store.methods.getAllUsers('smackchat-users')
-    })
+      store.methods.getAllUsers("smackchat-users");
+    });
 
     const handleClick = (user) => {
       // store.methods.saveUserId(user.id)
-      store.methods.saveUser(user)
-      router.push(`/chat/${user.id}`)
-      console.log(`other user id: ${user.id}`)
-    }
-    
+      store.methods.saveUser(user);
+      router.push(`/chat/${user.id}`);
+      console.log(`other user id: ${user.id}`);
+    };
+
     return { store, handleClick };
   },
 });
