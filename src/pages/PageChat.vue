@@ -29,7 +29,7 @@
         "
         :text="[message.text]"
         :sent="message.from === auth.currentUser.uid ? true : false"
-        :bg-color="message.from === auth.currentUser.uid ? 'white' : 'light-green-2'"
+        :bg-color="message.from === auth.currentUser.uid ? 'white' : 'light-green-5'"
       />
     </div>
     <div v-else class="q-pa-lg column col justify-end" ref="chats">
